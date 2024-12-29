@@ -33,10 +33,35 @@ export const LoginUser = async (req, res) => {
     if (!isPasswordCorrect) {
       return res.status(401).json({ message: "Invalid password" });
     }
-    const token =await jwt.sign({email},process.env.JWT_SECRET,{expiresIn:"1d"})
-    res.status(200).json({user,token});
+    const token =await jwt.sign({id:user._id},process.env.JWT_SECRET,{expiresIn:"1d"});
+    
+    // res.status(200).json({user,token});
+    res.cookie("token",token,{httpOnly:true}).json({message:"Login Successfull"})
   }
   catch (error) {
     res.status(500).json({ error: error.message });
   }
 }
+
+
+
+export const getProfile = async (req, res) => {
+  console.log(req.user)
+  try {
+    const user = await User.findById(req.user._id);
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+
+export const LogoutUser = async (req, res) => {
+  try {
+    res.clearCookie("token").json({message:"Logout Successfull"}); 
+  }
+  catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
