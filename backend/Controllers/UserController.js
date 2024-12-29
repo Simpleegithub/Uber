@@ -1,5 +1,6 @@
-import User from "../Models/UserModel";
+import User from "../Models/UserModel.js";
 import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken"
 
 export const CreateUser = async (req, res) => {
   try {
@@ -14,7 +15,7 @@ export const CreateUser = async (req, res) => {
       email,
       password : hashedPassword,
     });
-    res.status(201).json(user);
+    res.status(201).json({user,token});
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
