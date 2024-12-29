@@ -53,3 +53,59 @@ Notes:
 Password is automatically hashed using bcrypt
 JWT token is generated with 1 day expiration
 Email must be unique in the system
+
+
+
+
+## User Authentication Endpoints
+
+### POST `/api/user/login`
+Authenticates a user and returns a JWT token.
+
+**Request Body:**
+```json
+{
+  "email": "john@example.com",
+  "password": "password123"
+}
+
+
+Success Response:
+
+Status: 200
+
+{
+  "user": {
+    "fullName": {
+      "firstName": "John",
+      "lastName": "Doe"
+    },
+    "email": "john@example.com"
+  },
+  "token": "jwt_token_string"
+}
+
+Error Responses:
+
+User Not Found
+Status: 404
+
+{
+  "message": "User not found"
+}
+
+Invalid Password
+Status: 401
+
+Server Error
+Status: 500
+
+{
+  "error": "Error message"
+}
+
+Notes:
+
+Email and password are required fields
+Password is compared with hashed password stored in database
+Successful login returns a JWT token valid for 1 day
